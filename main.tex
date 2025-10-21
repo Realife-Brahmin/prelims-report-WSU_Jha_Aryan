@@ -1,0 +1,214 @@
+%\documentclass[openany]{book}
+\documentclass[hidelinks, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb} % for fancy L
+\usepackage{calrsfs} % for fancy L
+\usepackage{cancel}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage[hyphens]{url}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[titletoc,title]{appendix}
+\usepackage{rotating}
+\usepackage{tablefootnote}
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} %for fancy L
+\usepackage{epsfig,float,array,tabu,longtable}
+\usepackage{wrapfig}
+\usepackage{enumerate}
+\usepackage{psfrag}
+\usepackage{cite}
+\usepackage{sectsty}
+\usepackage{epstopdf}
+\usepackage{amsmath,esint,setspace,fancyhdr,amsfonts,bookmark,blindtext}
+\usepackage[normalem]{ulem}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage[americanvoltages,fulldiodes,siunitx]{circuitikz}
+\usepackage{stackengine}
+\usetikzlibrary{matrix,shapes,backgrounds,patterns,mindmap,trees,decorations.markings,quotes,angles,decorations}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{mathtools}
+\usepackage{verbatim}
+\renewcommand{\baselinestretch}{1}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.5in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0.25in}
+% graphicx already loaded above
+\setlength{\topmargin}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\parindent}{.3in}
+\usepackage{listings}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+\usepackage{algorithm}
+
+% Use caption + subcaption (do NOT load subfig; it conflicts with subcaption)
+\usepackage{caption}
+\usepackage{subcaption}
+\setcounter{secnumdepth}{5}
+\usetikzlibrary{decorations}
+% fontenc and caption/subcaption loaded above
+\usepackage{hhline}
+%\usepackage{float}
+% \usepackage{url}
+% \usepackage{hyperref}
+\usepackage{float}
+\usepackage{stfloats}
+\usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
+\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
+%\newcommand\tau{\mathcal{T}}% Caligraphic T for example
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+\usepackage{adjustbox}
+
+\newcommand{\revise}
+    {
+        \noindent \textcolor{black}
+    }
+
+
+% \onehalfspacing
+\begin{document}
+% \bstctlcite{IEEEexample:BSTcontrol}
+
+
+\begin{titlepage}
+
+ \begin{tikzpicture}[remember picture,overlay,inner sep=0,outer sep=0]
+     \draw[black,line width=2pt] ([xshift=-1.5cm,yshift=-2cm]current page.north east) coordinate (A)--([xshift=1.5cm,yshift=-2cm]current page.north west) coordinate(B)--([xshift=1.5cm,yshift=2cm]current page.south west) coordinate (C)--([xshift=-1.5cm,yshift=2cm]current page.south east) coordinate(D)--cycle;
+
+    %  \draw ([yshift=0.5cm,xshift=-0.5cm]A)-- ([yshift=0.5cm,xshift=0.5cm]B)--
+    %  ([yshift=-0.5cm,xshift=0.5cm]B) --([yshift=-0.5cm,xshift=-0.5cm]B)--([yshift=0.5cm,xshift=-0.5cm]C)--([yshift=0.5cm,xshift=0.5cm]C)--([yshift=-0.5cm,xshift=0.5cm]C)-- ([yshift=-0.5cm,xshift=-0.5cm]D)--([yshift=0.5cm,xshift=-0.5cm]D)--([yshift=0.5cm,xshift=0.5cm]D)--([yshift=-0.5cm,xshift=0.5cm]A)--([yshift=-0.5cm,xshift=-0.5cm]A)--([yshift=0.5cm,xshift=-0.5cm]A);
+
+
+     \draw ([yshift=-0.3cm,xshift=0.3cm]A)-- ([yshift=-0.3cm,xshift=-0.3cm]B)--
+     ([yshift=0.3cm,xshift=-0.3cm]B) --([yshift=0.3cm,xshift=0.3cm]B)--([yshift=-0.3cm,xshift=0.3cm]C)--([yshift=-0.3cm,xshift=-0.3cm]C)--([yshift=0.3cm,xshift=-0.3cm]C)-- ([yshift=0.3cm,xshift=0.3cm]D)--([yshift=-0.3cm,xshift=0.3cm]D)--([yshift=-0.3cm,xshift=-0.3cm]D)--([yshift=0.3cm,xshift=-0.3cm]A)--([yshift=0.3cm,xshift=0.3cm]A)--([yshift=-0.3cm,xshift=0.3cm]A);
+
+   \end{tikzpicture}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%---------------------------------------------------------
+%	HEADING SECTIONS
+%---------------------------------------------------------
+
+
+\newcommand*{\plogo}{\includegraphics[width=0.5\textwidth]{figures/wsu}}
+
+\plogo\\[1cm]
+
+\textsc{\large School of Electrical Engineering and Computer Science}\\[1.5cm] % Name of your university/college
+ % Major heading such as course name
+\textsc{\large \text{Ph.D. Preliminary Examination Report}}\\ % Minor heading such as course title
+
+%---------------------------------------------------------
+%	TITLE SECTION
+%---------------------------------------------------------
+
+\HRule \\
+{ \Large \bfseries Resilience Planning and Optimization of Electric Power Systems against Extreme Weather Events}
+\vspace{0.2 cm}
+%Evaluation and Quantification}\\[0.3cm] % Title of your document
+\HRule \\
+ 
+%---------------------------------------------------------
+%	AUTHOR SECTION
+%---------------------------------------------------------
+
+%\begin{minipage}{0.4\textwidth}
+
+\medskip
+\large
+{{\textbf{Submitted By}:\\ Abodh Poudyal }}\\ [0.5cm]
+
+\medskip
+
+\textbf{Committee Chair}:\\ Dr. Anamika Dubey \\ [0.5 cm]
+\textbf{Committee Members:} \\ Dr. Anjan Bose\\
+Dr. Noel N. Schulz\\
+
+\vspace{1.5 cm}
+\small School of EECS, Washington State University, Pullman, WA, 99164\\
+
+\vspace{1.0 cm}
+\small
+\textbf{Date}: 4/18/2023 \ \ \textbf{Time}: 1 p.m - 3 p.m. \ \ \textbf{Location}: EECS, EME 26, Pullman
+
+%---------------------------------------------------------
+\setstretch{1.0}
+
+\vfill % Fill the rest of the page with whitespace
+\end{titlepage}
+
+\newpage
+
+\input{sections/abstract.tex}
+\newpage
+\tableofcontents
+\newpage
+
+
+\setstretch{1.15}
+\input{sections/motivation.tex}
+Extreme weather events can have a devastating impact on the electric power grid, posing serious concerns for personal safety and national security. In the US alone, extreme weather events between 2003 and 2012 caused nearly 700 power outages, with 80-90\% of these outages resulting from power distribution system failures~\cite{DOE_res}. In 2021, there were 20 natural disasters in the US that caused losses exceeding \$1 billion each, highlighting the urgent need for more resilient power grid infrastructure~\cite{noaa}. Hurricanes, in particular, account for over a trillion dollars in economic losses and are responsible for a significant number of power outages in the US~\cite{cost_NOAA, 2020}. During landfall, as the strong hurricane wind field traverses inland, it propels a huge water body known as a storm surge flooding the coastal regions. The storm surge is sometimes the most destructive part of a hurricane and accounts for considerable damage~\cite{surge_web}. For instance, Hurricane Ida caused about \$55 billion in damages in Louisiana alone due to wind and storm surge damage, with additional flooding damage of about \$23 billion in the Northeastern US~\cite{IDA_NOAA}. Almost 1.2 million customers experienced power outages across eight different states. Hurricane Ian recently had a devastating impact in Florida and is expected to have incurred billions of dollars in losses, with a peak of about 2.7 million customers in a power outage~\cite{DOE_IAN}. The frequency of such high-impact, low-probability (HILP) events has increased at an alarming rate, costing about \$152.6 billion in climate-related disasters in 2021 alone in the US. Therefore, there is an urgent need to identify the potential impacts of these hazards on electric power systems. 
+
+The resulting socio-economic losses and the power grid's vulnerability to extreme weather events necessitate the incorporation of resilience in system planning to account for not only the expected events but also the extreme events that are less likely to occur. Towards this goal, different utilities have spent millions of dollars deploying smart grid technologies such as distribution automation with automated feeder switching, intentional islanding (microgrid), and upgrading vulnerable feeders and substations~\cite{9120304}. However, with the increasing frequency and severity of weather-related events, a more systematic approach to smart grid expenditures is required to identify appropriate system upgrade solutions for strengthening system resilience. This proposal aims to build a risk-averse planning framework that can enhance the resilience of power distribution systems against extreme weather events.
+
+\setstretch{1.15}
+\input{sections/motivation.tex}
+
+
+\newpage
+
+\input{sections/abstract.tex}
+\newpage
+\tableofcontents
+\newpage
+
+
+\setstretch{1.15}
+\input{sections/motivation.tex}
+
+
+\input{sections/objectives.tex}
+
+\section{Risk-based distribution system planning against extreme weather events} 
+\begin{comment}
+(\textcolor{red}{planning solution not just bulk or distribution. developing a framework ... defining the metric first and it is all about how we do that for a test case:-> distribution...at the end talk about ...we need to scale this ... broader geographic area .... create setup for bulk system  }}
+\end{comment}
+
+\input{sections/risk_quantification.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% NEXT CHAPTER %%%%%%%%%%%%%%%%%%%%%
+\newpage
+\input{sections/risk_planning.tex}
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Spatiotemporal Impact Assessment Chapter %%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spatiotemporal impact assessment of hurricanes and storm surges in electric power systems}
+\input{sections/spatiotemporal_assessment.tex}
+
+\clearpage
+\section{Future Works}\label{sec:future_Work}
+\input{sections/future_works.tex}
+
+
+\newpage
+\section{Biography}
+\input{sections/biography.tex}
+
+% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref.bib}
+\end{document}

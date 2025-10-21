@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"window.autoDetectColorScheme": false, // required!
+		"extensions.ignoreRecommendations": true,
+		"workbench.preferredLightColorTheme": "Bearded Themanopia (Experimental)",
+		"workbench.preferredDarkColorTheme": "Bearded Theme Surprising Watermelon",
+	},
+}
