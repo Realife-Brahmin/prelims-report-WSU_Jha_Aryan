@@ -14,9 +14,9 @@
 % Math font declarations (with error protection for compatibility)
 \usepackage{calrsfs} % for fancy L
 \IfFileExists{zplm.tfm}{%
-  \DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+    \DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
 }{%
-  \newcommand{\pazocal}{\mathcal} % Fallback if font not available
+    \newcommand{\pazocal}{\mathcal} % Fallback if font not available
 }
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
@@ -193,11 +193,6 @@ Dr. Noel N. Schulz\\
 
 \input{sections/objectives.tex}
 
-\section{Risk-based distribution system planning against extreme weather events} 
-\begin{comment}
-(\textcolor{red}{planning solution not just bulk or distribution. developing a framework ... defining the metric first and it is all about how we do that for a test case:-> distribution...at the end talk about ...we need to scale this ... broader geographic area .... create setup for bulk system  }}
-\end{comment}
-
 \input{sections/risk_quantification.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%% NEXT CHAPTER %%%%%%%%%%%%%%%%%%%%%
@@ -206,7 +201,6 @@ Dr. Noel N. Schulz\\
 
 \clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Spatiotemporal Impact Assessment Chapter %%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Spatiotemporal impact assessment of hurricanes and storm surges in electric power systems}
 \input{sections/spatiotemporal_assessment.tex}
 
 \clearpage
@@ -214,7 +208,6 @@ Dr. Noel N. Schulz\\
 
 
 \newpage
-\section{Biography}
 \input{sections/biography.tex}
 
 % BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
