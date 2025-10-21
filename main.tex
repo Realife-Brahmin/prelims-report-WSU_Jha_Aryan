@@ -1,72 +1,104 @@
 %\documentclass[openany]{book}
 \documentclass[hidelinks, 12pt]{article}
+
+% Font encoding - load early
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{amssymb} % for fancy L
+
+% Math packages - load before other packages
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{esint}
+\usepackage{bm}
+
+% Math font declarations (with error protection for compatibility)
 \usepackage{calrsfs} % for fancy L
-\usepackage{cancel}
-\usepackage{tabularx}
-\usepackage{makecell}
-\usepackage[hyphens]{url}
-\usepackage{booktabs}
+\IfFileExists{zplm.tfm}{%
+  \DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+}{%
+  \newcommand{\pazocal}{\mathcal} % Fallback if font not available
+}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+% Graphics packages
 \usepackage{graphicx}
-\usepackage[titletoc,title]{appendix}
+\usepackage{epstopdf} % For EPS conversion
+% NOTE: epsfig is deprecated - use graphicx instead
+\usepackage{color} % Load before xcolor if needed
+\definecolor{mygreen}{RGB}{28,172,0}
+\definecolor{mylilas}{RGB}{170,55,241}
+
+% Float and table packages
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+% NOTE: tabu package is REMOVED - it's unmaintained and broken on modern LaTeX
+% Use tabularx, longtable, or array instead
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{hhline}
+\usepackage{wrapfig}
 \usepackage{rotating}
 \usepackage{tablefootnote}
-\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n} %for fancy L
-\usepackage{epsfig,float,array,tabu,longtable}
-\usepackage{wrapfig}
-\usepackage{enumerate}
-\usepackage{psfrag}
-\usepackage{cite}
-\usepackage{sectsty}
-\usepackage{epstopdf}
-\usepackage{amsmath,esint,setspace,fancyhdr,amsfonts,bookmark,blindtext}
-\usepackage[normalem]{ulem}
-\usepackage{bm}
+\usepackage{stfloats}
+
+% tikz and circuitikz
 \usepackage{tikz}
 \usepackage[americanvoltages,fulldiodes,siunitx]{circuitikz}
-\usepackage{stackengine}
 \usetikzlibrary{matrix,shapes,backgrounds,patterns,mindmap,trees,decorations.markings,quotes,angles,decorations}
-\usepackage{multirow}
+
+% Caption packages
+\usepackage{caption}
+\usepackage{subcaption}
+
+% URL package - load BEFORE hyperref/bookmark with options
+\usepackage[hyphens]{url}
+
+% Other formatting packages
+\usepackage[titletoc,title]{appendix}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{bookmark} % This loads hyperref, which also loads url
+\usepackage{blindtext}
+\usepackage[normalem]{ulem}
+\usepackage{cancel}
+\usepackage{sectsty}
+\usepackage{enumerate}
 \usepackage{multicol}
-\usepackage{mathtools}
 \usepackage{verbatim}
+\usepackage{stackengine}
+\usepackage{adjustbox}
+
+% Citation package
+\usepackage{cite}
+
+% Code listing packages
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+
+% psfrag for PS graphics (keep if you use it)
+\usepackage{psfrag}
+
+% Page layout settings
 \renewcommand{\baselinestretch}{1}
 \setlength{\textheight}{8in}
 \setlength{\textwidth}{6.5in}
 \setlength{\headheight}{0in}
 \setlength{\headsep}{0.25in}
-% graphicx already loaded above
 \setlength{\topmargin}{0in}
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
 \setlength{\parindent}{.3in}
-\usepackage{listings}
-\usepackage{algpseudocode}
-\usepackage{pifont}
-\usepackage{algorithm}
 
-% Use caption + subcaption (do NOT load subfig; it conflicts with subcaption)
-\usepackage{caption}
-\usepackage{subcaption}
+% Other settings
 \setcounter{secnumdepth}{5}
-\usetikzlibrary{decorations}
-% fontenc and caption/subcaption loaded above
-\usepackage{hhline}
-%\usepackage{float}
-% \usepackage{url}
-% \usepackage{hyperref}
-\usepackage{float}
-\usepackage{stfloats}
 \usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
 \AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
 %\newcommand\tau{\mathcal{T}}% Caligraphic T for example
-\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
-\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
-\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
-\definecolor{mylilas}{RGB}{170,55,241}
-\usepackage{adjustbox}
 
 \newcommand{\revise}
     {
@@ -156,28 +188,8 @@ Dr. Noel N. Schulz\\
 \tableofcontents
 \newpage
 
-
 \setstretch{1.15}
 \input{sections/motivation.tex}
-Extreme weather events can have a devastating impact on the electric power grid, posing serious concerns for personal safety and national security. In the US alone, extreme weather events between 2003 and 2012 caused nearly 700 power outages, with 80-90\% of these outages resulting from power distribution system failures~\cite{DOE_res}. In 2021, there were 20 natural disasters in the US that caused losses exceeding \$1 billion each, highlighting the urgent need for more resilient power grid infrastructure~\cite{noaa}. Hurricanes, in particular, account for over a trillion dollars in economic losses and are responsible for a significant number of power outages in the US~\cite{cost_NOAA, 2020}. During landfall, as the strong hurricane wind field traverses inland, it propels a huge water body known as a storm surge flooding the coastal regions. The storm surge is sometimes the most destructive part of a hurricane and accounts for considerable damage~\cite{surge_web}. For instance, Hurricane Ida caused about \$55 billion in damages in Louisiana alone due to wind and storm surge damage, with additional flooding damage of about \$23 billion in the Northeastern US~\cite{IDA_NOAA}. Almost 1.2 million customers experienced power outages across eight different states. Hurricane Ian recently had a devastating impact in Florida and is expected to have incurred billions of dollars in losses, with a peak of about 2.7 million customers in a power outage~\cite{DOE_IAN}. The frequency of such high-impact, low-probability (HILP) events has increased at an alarming rate, costing about \$152.6 billion in climate-related disasters in 2021 alone in the US. Therefore, there is an urgent need to identify the potential impacts of these hazards on electric power systems. 
-
-The resulting socio-economic losses and the power grid's vulnerability to extreme weather events necessitate the incorporation of resilience in system planning to account for not only the expected events but also the extreme events that are less likely to occur. Towards this goal, different utilities have spent millions of dollars deploying smart grid technologies such as distribution automation with automated feeder switching, intentional islanding (microgrid), and upgrading vulnerable feeders and substations~\cite{9120304}. However, with the increasing frequency and severity of weather-related events, a more systematic approach to smart grid expenditures is required to identify appropriate system upgrade solutions for strengthening system resilience. This proposal aims to build a risk-averse planning framework that can enhance the resilience of power distribution systems against extreme weather events.
-
-\setstretch{1.15}
-\input{sections/motivation.tex}
-
-
-\newpage
-
-\input{sections/abstract.tex}
-\newpage
-\tableofcontents
-\newpage
-
-
-\setstretch{1.15}
-\input{sections/motivation.tex}
-
 
 \input{sections/objectives.tex}
 
@@ -198,7 +210,6 @@ The resulting socio-economic losses and the power grid's vulnerability to extrem
 \input{sections/spatiotemporal_assessment.tex}
 
 \clearpage
-\section{Future Works}\label{sec:future_Work}
 \input{sections/future_works.tex}
 
 
