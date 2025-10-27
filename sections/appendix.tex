@@ -7,33 +7,92 @@
 
 % \input{sections/branchFlowModel.tex}
 
-\subsection*{Full MPOPF Formulation}
+\subsection*{Full MPOPF Formulation with LinDistFlow}
 \label{subsec:full-mpopf}
 
-\begin{gather}
-	\begin{align}
-		\min_{
-		\substack{
-		q_{D_j}^t, P_{c_j}^t, P_d{_j}^t, q_{B_j}^t}
-		} 
-		\vspace{-15ex} % Adjust the space here
-		& \quad
-		\sum_{t = 1}^{T} \sum_{(i, j) \in \mathbb{L}} (C^t P^t_{Subs}) \\
-		&+ \alpha \sum_{t = 1}^{T} \sum_{j \in \mathbb{B}} \left\{ (1- \eta_c)P_{c_j}^t + \left(\frac{1}{\eta_d}-1\right) P_{d_j}^t \right\} \\
-		&+ \gamma \sum_{j \in \mathbb{B}} \left\{ \left(B^{T}_{j} - B_{ref_{j}}\right)^2\right\} \\
-		\text{s.t.} & {}\nonumber \\
-		{p_j^t} & = {\sum_{(j, k) \in \mathbb{L}} P_{jk}^t - \sum_{(i, j) \in \mathbb{L}}\left\{P_{ij}^t - r_{ij}l_{ij}^t\right\} - P_{d_j}^t + P_{c_j}^t} && \\
-		{q_j^t} & = {\sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - \sum_{(i, j) \in \mathbb{L}}\left\{Q_{ij}^t - x_{ij}l_{ij}^t\right\} - q_{D_j}^t - q_{B_j}^t} && \\
-		{v_j^t} & = {v_{i}^t +  \left\{r_{ij}^2 + x_{ij}^2\right\}l_{ij}^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t)} && \\
-		{l_{ij}^t} & = {\frac{(P_{ij}^{t})^2 + (Q_{ij}^{t})^2}{v_i^t}} \\
-		{ B_{j}^{t} } &= { B_{j}^{t-1} + \Delta t  \eta_c P_{c_j}^t - \Delta t\frac{1}{\eta_d} P_{d_j}^t } \\
-		{ B_{j}^{0} } &= { 0.5(soc_{max}+soc_{min})E_{Rated} = 0.625E_{Rated}} \\
-		% { B_{j}^{T} } &= { B_{j}^{0}} \\
-		{where,} & {} \\
-		{(i, j)} &: {\text{Branch connecting nodes $i$ and $j$}} \\
-		{p_j^t} &= {p_D{_j}^t - p_L{_j}^t} \\
-		{q_j^t} &= {-q_L{_j}^t} \\
-		{P_{Subs}^t} &<= {P_{SubsPeak}} \\
-		{t} &= {\{1, 2, \ldots T\}}
-	\end{align}
-\end{gather}
+\textbf{Sets:}
+\begin{itemize}
+    \item $\mathbb{N}$: Set of all buses, with substation bus $j_1 \in \mathbb{N}$
+    \item $\mathbb{N} \backslash \{j_1\}$: Set of non-substation buses
+    \item $\mathbb{L}$: Set of all branches (directed edges)
+    \item $\mathbb{L}_1$: Set of branches directly connected to substation bus $j_1$
+    \item $\mathbb{L} \backslash \mathbb{L}_1$: Set of branches not connected to substation
+    \item $\mathbb{B}$: Set of buses with battery storage
+    \item $\mathbb{D}$: Set of buses with distributed generation (PV)
+    \item $\mathbb{T}$: Set of time periods $\{1, 2, \ldots, T\}$
+\end{itemize}
+
+\textbf{Objective Function:}
+\begin{align}
+    \min \quad & \sum_{t \in \mathbb{T}} C^t P^t_{\text{Subs}} \Delta t 
+    + \sum_{t \in \mathbb{T}} \sum_{j \in \mathbb{B}} C_B (P_{B_j}^t)^2 \Delta t
+\end{align}
+
+\textbf{Subject to:}
+
+\textit{Power Balance at Substation Bus ($j = j_1$):}
+\begin{align}
+    P^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} P_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:subs_real} \\
+    Q^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} Q_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:subs_reactive}
+\end{align}
+
+\textit{Power Balance at Non-Substation Buses ($j \in \mathbb{N} \backslash \{j_1\}$):}
+\begin{align}
+    \sum_{(j, k) \in \mathbb{L}} P_{jk}^t - P_{ij}^t &= P_{B_j}^t + p_{D_j}^t - p_{L_j}^t, \quad \forall j \in \mathbb{N} \backslash \{j_1\}, \forall t \in \mathbb{T} \label{eq:node_real} \\
+    \sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - Q_{ij}^t &= q_{D_j}^t - q_{L_j}^t, \quad \forall j \in \mathbb{N} \backslash \{j_1\}, \forall t \in \mathbb{T} \label{eq:node_reactive}
+\end{align}
+where $i = \text{parent}(j)$.
+
+\textit{Voltage Drop (LinDistFlow KVL):}
+\begin{align}
+    v_j^t = v_i^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t), \quad \forall (i,j) \in \mathbb{L}, \forall t \in \mathbb{T} \label{eq:kvl}
+\end{align}
+
+\textit{Substation Voltage:}
+\begin{align}
+    v_{j_1}^t = v_{\text{nom}}^2, \quad \forall t \in \mathbb{T} \label{eq:subs_voltage}
+\end{align}
+
+\textit{Voltage Limits:}
+\begin{align}
+    (v_{\min})^2 \leq v_j^t \leq (v_{\max})^2, \quad \forall j \in \mathbb{N}, \forall t \in \mathbb{T} \label{eq:voltage_limits}
+\end{align}
+
+\textit{Battery State of Charge:}
+\begin{align}
+    B_j^t &= B_j^{t-1} - P_{B_j}^t \Delta t, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \backslash \{1\} \label{eq:battery_soc} \\
+    B_j^1 &= B_{j,0}, \quad \forall j \in \mathbb{B} \label{eq:battery_init}
+\end{align}
+
+\textit{Battery Constraints:}
+\begin{align}
+    \text{SOC}_{\min} B_{R_j} \leq B_j^t &\leq \text{SOC}_{\max} B_{R_j}, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \label{eq:battery_soc_limits} \\
+    -P_{B_{R_j}} \leq P_{B_j}^t &\leq P_{B_{R_j}}, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \label{eq:battery_power_limits}
+\end{align}
+
+\textit{PV Reactive Power Limits:}
+\begin{align}
+    -\sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2} \leq q_{D_j}^t \leq \sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2}, \quad \forall j \in \mathbb{D}, \forall t \in \mathbb{T} \label{eq:pv_reactive}
+\end{align}
+
+\textbf{Variables:}
+\begin{itemize}
+    \item $P^t_{\text{Subs}}, Q^t_{\text{Subs}}$: Substation real and reactive power at time $t$
+    \item $P_{ij}^t, Q_{ij}^t$: Real and reactive power flow on branch $(i,j)$ at time $t$
+    \item $v_j^t$: Squared voltage magnitude at bus $j$ at time $t$
+    \item $P_{B_j}^t$: Battery power at bus $j$ at time $t$ (positive = discharging)
+    \item $B_j^t$: Battery state of charge at bus $j$ at time $t$
+    \item $q_{D_j}^t$: PV reactive power injection at bus $j$ at time $t$
+\end{itemize}
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item $C^t$: Energy cost at time $t$ (\$/kWh)
+    \item $C_B$: Battery degradation cost coefficient
+    \item $\Delta t$: Time step duration
+    \item $r_{ij}, x_{ij}$: Branch resistance and reactance
+    \item $p_{L_j}^t, q_{L_j}^t$: Load real and reactive power at bus $j$ at time $t$
+    \item $p_{D_j}^t$: PV real power generation at bus $j$ at time $t$
+    \item $B_{R_j}, P_{B_{R_j}}$: Battery energy and power capacity at bus $j$
+    \item $S_{D_{R_j}}$: PV apparent power capacity at bus $j$
+\end{itemize}
