@@ -18,8 +18,52 @@ The time-line for the research efforts as detailed in Section~\ref{sec:future_Wo
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\linewidth]{figures/timeline.PNG}
-  \vspace{-0.2 cm}
-  \caption{\small Gantt chart showing execution plan for future works.}
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    hgrid,
+    vgrid={*6{draw=none}, dotted},
+    x unit=1.0cm,
+    y unit title=0.8cm,
+    y unit chart=0.5cm,
+    title height=1,
+    bar height=0.6,
+    group height=0.5,
+    bar/.append style={fill=blue!50},
+    group/.append style={fill=blue!30, draw=black},
+    bar label font=\footnotesize,
+    group label font=\footnotesize\bfseries,
+    title label font=\small\bfseries,
+    milestone/.append style={fill=red!50, rounded corners=2pt},
+    bar label node/.append style={align=left, text width=8cm},
+]{1}{12}
+    % Timeline labels
+    \gantttitle{Spring 2023}{3}
+    \gantttitle{Summer 2023}{3}
+    \gantttitle{Fall 2024}{3}
+    \gantttitle{Spring 2024}{3} \\
+    
+    % Task 1
+    \ganttgroup{Task 1: Large-scale Resilience Planning}{1}{12} \\
+    \ganttbar[bar/.append style={fill=blue!40}]{1.1 DG Planning with Dual Decomposition}{1}{9} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Lit. Review}{1}{3} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation}{3}{5} \\
+    \ganttbar[bar/.append style={fill=gray!60}]{Implementation}{5}{9} \\
+    \ganttbar[bar/.append style={fill=orange!40}]{1.2 Hub-Spoke Parallel Optimization}{6}{12} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Lit. Review}{6}{8} \\
+    \ganttbar[bar/.append style={fill=gray!60}]{Formulation}{7}{9} \\
+    \ganttbar[bar/.append style={fill=black!80}]{Implementation}{9}{12} \\
+    
+    % Task 2
+    \ganttgroup[group/.append style={fill=green!30}]{Task 2: Defensive Islanding Against Weather}{6}{12} \\
+    \ganttbar[bar/.append style={fill=green!40}]{Lit. Review}{6}{8} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation}{8}{10} \\
+    \ganttbar[bar/.append style={fill=black!80}]{Implementation}{10}{12} \\
+    
+    % Dissertation
+    \ganttbar[bar/.append style={fill=blue!60}]{Dissertation and Defense}{9}{12}
+\end{ganttchart}%
+}
+\vspace{-0.2 cm}
+\caption{\small Gantt chart showing execution plan for future works.}
 \label{fig:time}
 \end{figure}
