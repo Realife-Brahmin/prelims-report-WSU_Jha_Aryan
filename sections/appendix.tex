@@ -18,7 +18,7 @@
     \item $\mathbb{L}_1$: Set of branches directly connected to substation bus $j_1$
     \item $\mathbb{L} \backslash \mathbb{L}_1$: Set of branches not connected to substation
     \item $\mathbb{B}$: Set of buses with battery storage
-    \item $\mathbb{D}$: Set of buses with distributed generation (PV)
+    \item $\mathbb{D}$: Set of buses with distributed energy resources (DERs)
     \item $\mathbb{T}$: Set of time periods $\{1, 2, \ldots, T\}$
 \end{itemize}
 
@@ -38,10 +38,9 @@
 
 \textit{Power Balance at Non-Substation Buses ($j \in \mathbb{N} \backslash \{j_1\}$):}
 \begin{align}
-    \sum_{(j, k) \in \mathbb{L}} P_{jk}^t - P_{ij}^t &= P_{B_j}^t + p_{D_j}^t - p_{L_j}^t, \quad \forall j \in \mathbb{N} \backslash \{j_1\}, \forall t \in \mathbb{T} \label{eq:node_real} \\
-    \sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - Q_{ij}^t &= q_{D_j}^t - q_{L_j}^t, \quad \forall j \in \mathbb{N} \backslash \{j_1\}, \forall t \in \mathbb{T} \label{eq:node_reactive}
+    \sum_{(j, k) \in \mathbb{L}} P_{jk}^t - \sum_{(i, j) \in \mathbb{L}} P_{ij}^t &= P_{B_j}^t + p_{D_j}^t - p_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:node_real} \\
+    \sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - \sum_{(i, j) \in \mathbb{L}} Q_{ij}^t &= q_{D_j}^t - q_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:node_reactive}
 \end{align}
-where $i = \text{parent}(j)$.
 
 \textit{Voltage Drop (LinDistFlow KVL):}
 \begin{align}
@@ -78,7 +77,7 @@ where $i = \text{parent}(j)$.
 \textbf{Variables:}
 \begin{itemize}
     \item $P^t_{\text{Subs}}, Q^t_{\text{Subs}}$: Substation real and reactive power at time $t$
-    \item $P_{ij}^t, Q_{ij}^t$: Real and reactive power flow on branch $(i,j)$ at time $t$
+    \item $P_{ij}^t, Q_{ij}^t$: Sending-end real and reactive power flow on branch $(i,j)$ at time $t$
     \item $v_j^t$: Squared voltage magnitude at bus $j$ at time $t$
     \item $P_{B_j}^t$: Battery power at bus $j$ at time $t$ (positive = discharging)
     \item $B_j^t$: Battery state of charge at bus $j$ at time $t$
