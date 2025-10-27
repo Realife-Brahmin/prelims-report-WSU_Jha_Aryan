@@ -21,10 +21,10 @@ The time-line for the research efforts as detailed in Section~\ref{sec:future_Wo
 \resizebox{\textwidth}{!}{%
 \begin{ganttchart}[
     hgrid,
-    vgrid={*6{draw=none}, dotted},
-    x unit=1.0cm,
+    vgrid={*4{draw=none}, dotted},
+    x unit=1.2cm,
     y unit title=0.8cm,
-    y unit chart=0.5cm,
+    y unit chart=0.6cm,
     title height=1,
     bar height=0.6,
     group height=0.5,
@@ -34,33 +34,34 @@ The time-line for the research efforts as detailed in Section~\ref{sec:future_Wo
     group label font=\footnotesize\bfseries,
     title label font=\small\bfseries,
     milestone/.append style={fill=red!50, rounded corners=2pt},
-    bar label node/.append style={align=left, text width=8cm},
-]{1}{12}
+    bar label node/.append style={align=left, text width=10cm},
+]{1}{9}
     % Timeline labels
-    \gantttitle{Spring 2023}{3}
-    \gantttitle{Summer 2023}{3}
-    \gantttitle{Fall 2024}{3}
-    \gantttitle{Spring 2024}{3} \\
+    \gantttitle{Fall 2025}{3}
+    \gantttitle{Spring 2026}{3}
+    \gantttitle{Summer 2026}{3} \\
     
-    % Task 1
-    \ganttgroup{Task 1: Large-scale Resilience Planning}{1}{12} \\
-    \ganttbar[bar/.append style={fill=blue!40}]{1.1 DG Planning with Dual Decomposition}{1}{9} \\
-    \ganttbar[bar/.append style={fill=white, draw=black}]{Lit. Review}{1}{3} \\
-    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation}{3}{5} \\
-    \ganttbar[bar/.append style={fill=gray!60}]{Implementation}{5}{9} \\
-    \ganttbar[bar/.append style={fill=orange!40}]{1.2 Hub-Spoke Parallel Optimization}{6}{12} \\
-    \ganttbar[bar/.append style={fill=white, draw=black}]{Lit. Review}{6}{8} \\
-    \ganttbar[bar/.append style={fill=gray!60}]{Formulation}{7}{9} \\
-    \ganttbar[bar/.append style={fill=black!80}]{Implementation}{9}{12} \\
+    % Fall 2025 Task
+    \ganttgroup{Task 1: Temporal Decomposition for Medium Systems}{1}{3} \\
+    \ganttbar[bar/.append style={fill=blue!40}]{Implementing tADMM for 1-ph Systems (IEEE 123)}{1}{3} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation Development}{1}{2} \\
+    \ganttbar[bar/.append style={fill=gray!60}]{Implementation for T=24, 96}{2}{3} \\
     
-    % Task 2
-    \ganttgroup[group/.append style={fill=green!30}]{Task 2: Defensive Islanding Against Weather}{6}{12} \\
-    \ganttbar[bar/.append style={fill=green!40}]{Lit. Review}{6}{8} \\
-    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation}{8}{10} \\
-    \ganttbar[bar/.append style={fill=black!80}]{Implementation}{10}{12} \\
+    % Spring 2026 Task
+    \ganttgroup[group/.append style={fill=green!30}]{Task 2: Spatial Decomposition for Large 3-ph Systems}{3}{6} \\
+    \ganttbar[bar/.append style={fill=green!40}]{Expanding to 3-ph Systems (IEEE 9500)}{3}{6} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Formulation Development}{3}{4} \\
+    \ganttbar[bar/.append style={fill=orange!40}]{Decomposition Methods}{4}{5} \\
+    \ganttbar[bar/.append style={fill=gray!60}]{Implementation and Testing}{5}{6} \\
+    
+    % DDP Research
+    \ganttgroup[group/.append style={fill=purple!30}]{Task 3: Differential Dynamic Programming}{5}{7} \\
+    \ganttbar[bar/.append style={fill=purple!40}]{DDP Research and Implementation}{5}{7} \\
+    \ganttbar[bar/.append style={fill=white, draw=black}]{Literature Review}{5}{6} \\
+    \ganttbar[bar/.append style={fill=black!60}]{Formulation and Testing}{6}{7} \\
     
     % Dissertation
-    \ganttbar[bar/.append style={fill=blue!60}]{Dissertation and Defense}{9}{12}
+    \ganttbar[bar/.append style={fill=red!50}]{Dissertation Preparation and Defense}{7}{9}
 \end{ganttchart}%
 }
 \vspace{-0.2 cm}
