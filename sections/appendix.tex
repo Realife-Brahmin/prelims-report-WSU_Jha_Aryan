@@ -5,10 +5,11 @@
 \addcontentsline{toc}{section}{Appendix}
 \label{sec:appendix}
 
-% \input{sections/branchFlowModel.tex}
+In \Cref{subsec:full-mpopf-lindistflow} from \Crefrange{eq:objfun-cost-of-substation-power-ldf}{eq:pv-reactive-limits-ldf}, the full optimization formulation for the Multi-Period Optimal Power Flow (MPOPF) problem using the LinDistFlow model is presented.
 
-\subsection*{Full MPOPF Formulation with LinDistFlow}
-\label{subsec:full-mpopf}
+
+\subsection{Full MPOPF Formulation with LinDistFlow}
+\label{subsec:full-mpopf-lindistflow}
 
 \textbf{Sets:}
 \begin{itemize}
@@ -25,53 +26,53 @@
 \textbf{Objective Function:}
 \begin{align}
     \min \quad & \sum_{t \in \mathbb{T}} C^t P^t_{\text{Subs}} \Delta t 
-    + \sum_{t \in \mathbb{T}} \sum_{j \in \mathbb{B}} C_B (P_{B_j}^t)^2 \Delta t
+    + \sum_{t \in \mathbb{T}} \sum_{j \in \mathbb{B}} C_B (P_{B_j}^t)^2 \Delta t \label{eq:objfun-cost-of-substation-power-ldf}
 \end{align}
 
 \textbf{Subject to:}
 
 \textit{Power Balance at Substation Bus ($j = j_1$):}
 \begin{align}
-    P^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} P_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:subs_real} \\
-    Q^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} Q_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:subs_reactive}
+    P^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} P_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:substation-power-real-ldf} \\
+    Q^t_{\text{Subs}} - \sum_{(j_1, k) \in \mathbb{L}_1} Q_{j_1 k}^t &= 0, \quad \forall t \in \mathbb{T} \label{eq:subs-reactive-ldf}
 \end{align}
 
 \textit{Power Balance at Non-Substation Buses ($j \in \mathbb{N} \backslash \{j_1\}$):}
 \begin{align}
-    \sum_{(j, k) \in \mathbb{L}} P_{jk}^t - \sum_{(i, j) \in \mathbb{L}} P_{ij}^t &= P_{B_j}^t + p_{D_j}^t - p_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:node_real} \\
-    \sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - \sum_{(i, j) \in \mathbb{L}} Q_{ij}^t &= q_{D_j}^t - q_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:node_reactive}
+    \sum_{(j, k) \in \mathbb{L}} P_{jk}^t - \sum_{(i, j) \in \mathbb{L}} P_{ij}^t &= P_{B_j}^t + p_{D_j}^t - p_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:nodal-real-power-balance-ldf} \\
+    \sum_{(j, k) \in \mathbb{L}} Q_{jk}^t - \sum_{(i, j) \in \mathbb{L}} Q_{ij}^t &= q_{D_j}^t - q_{L_j}^t, \quad \forall j \in \mathbb{N} , \forall t \in \mathbb{T} \label{eq:nodal-reactive-power-balance-ldf}
 \end{align}
 
 \textit{Voltage Drop (LinDistFlow KVL):}
 \begin{align}
-    v_j^t = v_i^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t), \quad \forall (i,j) \in \mathbb{L}, \forall t \in \mathbb{T} \label{eq:kvl}
+    v_j^t = v_i^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t), \quad \forall (i,j) \in \mathbb{L}, \forall t \in \mathbb{T} \label{eq:kvl-ldf}
 \end{align}
 
 \textit{Substation Voltage:}
 \begin{align}
-    v_{j_1}^t = v_{\text{nom}}^2, \quad \forall t \in \mathbb{T} \label{eq:subs_voltage}
+    v_{j_1}^t = v_{\text{nom}}^2, \quad \forall t \in \mathbb{T} \label{eq:subs-voltage-ldf}
 \end{align}
 
 \textit{Voltage Limits:}
 \begin{align}
-    (v_{\min})^2 \leq v_j^t \leq (v_{\max})^2, \quad \forall j \in \mathbb{N}, \forall t \in \mathbb{T} \label{eq:voltage_limits}
+    (v_{\min})^2 \leq v_j^t \leq (v_{\max})^2, \quad \forall j \in \mathbb{N}, \forall t \in \mathbb{T} \label{eq:voltage-limits-ldf}
 \end{align}
 
 \textit{Battery State of Charge:}
 \begin{align}
-    B_j^t &= B_j^{t-1} - P_{B_j}^t \Delta t, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \backslash \{1\} \label{eq:battery_soc} \\
-    B_j^1 &= B_{j,0}, \quad \forall j \in \mathbb{B} \label{eq:battery_init}
+    B_j^t &= B_j^{t-1} - P_{B_j}^t \Delta t, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \backslash \{1\} \label{eq:battery-soc-trajectory-ldf} \\
+    B_j^1 &= B_{j,0}, \quad \forall j \in \mathbb{B} \label{eq:battery-initial-soc-ldf}
 \end{align}
 
 \textit{Battery Constraints:}
 \begin{align}
     \text{SOC}_{\min} B_{R_j} \leq B_j^t &\leq \text{SOC}_{\max} B_{R_j}, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \label{eq:battery_soc_limits} \\
-    -P_{B_{R_j}} \leq P_{B_j}^t &\leq P_{B_{R_j}}, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \label{eq:battery_power_limits}
+    -P_{B_{R_j}} \leq P_{B_j}^t &\leq P_{B_{R_j}}, \quad \forall j \in \mathbb{B}, \forall t \in \mathbb{T} \label{eq:batter-real-power-limits-ldf}
 \end{align}
 
 \textit{PV Reactive Power Limits:}
 \begin{align}
-    -\sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2} \leq q_{D_j}^t \leq \sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2}, \quad \forall j \in \mathbb{D}, \forall t \in \mathbb{T} \label{eq:pv_reactive}
+    -\sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2} \leq q_{D_j}^t \leq \sqrt{S_{D_{R_j}}^2 - (p_{D_j}^t)^2}, \quad \forall j \in \mathbb{D}, \forall t \in \mathbb{T} \label{eq:pv-reactive-limits-ldf} 
 \end{align}
 
 \textbf{Variables:}
