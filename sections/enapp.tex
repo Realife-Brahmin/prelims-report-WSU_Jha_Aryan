@@ -370,6 +370,8 @@ Several important observations emerge from the case study results:
 
 The ENApp-based MPDOPF framework has been successfully implemented and validated on the IEEE 123 bus test system with realistic DER and battery penetrations. The current implementation uses the branch flow model with nonlinear constraints, solved using sequential quadratic programming (SQP) within MATLAB's \texttt{fmincon} solver.
 
+\textbf{Scalability Limitations:} While ENApp achieves 10-13× speedup via spatial decomposition, computational challenges remain for \textit{long time horizons} (e.g., $T > 10$ hours). The coupling across all time periods within each spatial subproblem still requires solving large-scale optimization problems. For planning horizons spanning 24+ hours, spatial decomposition alone proves insufficient. This motivates the need for \textit{temporal decomposition} strategies—the focus of the next chapter—which decompose the time horizon into manageable sub-horizons while maintaining feasibility and near-optimality.
+
 Future extensions of this work will focus on:
 
 \begin{itemize}
@@ -381,4 +383,4 @@ Future extensions of this work will focus on:
     \item \textbf{Convergence Acceleration}: Investigating adaptive parameter tuning and warm-start strategies to reduce the number of macro iterations
 \end{itemize}
 
-The successful demonstration of ENApp-based MPDOPF on realistic test cases provides a strong foundation for deploying distributed optimization algorithms in operational settings, where computational efficiency and scalability are critical requirements.
+The successful demonstration of ENApp-based MPDOPF on realistic test cases provides a strong foundation for deploying distributed optimization algorithms in operational settings. However, recognizing the complementary need for temporal decomposition leads naturally to the investigation presented in the following chapter.
