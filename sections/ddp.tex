@@ -91,9 +91,6 @@ DDP offers significant computational benefits compared to monolithic MPOPF formu
     \item \textbf{Warm Starting}: Previous solutions provide excellent initialization for rolling-horizon Model Predictive Control (MPC) implementations.
 \end{enumerate}
 
-For a 24-hour horizon with 15-minute resolution ($N=96$), 123-bus system (IEEE 123), and 30 batteries, DDP reduces the problem from jointly optimizing $\sim$10,000 variables to solving 96 sequential subproblems each with $\sim$100 variables.
-
-
 For MPOPF, the projection approach is most practical, as it maintains power flow feasibility explicitly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,16 +145,33 @@ To demonstrate the effectiveness of DDP for temporal decomposition, we present r
     \label{fig:ddp-convergence-ldf}
 \end{figure}
 
+To further validate the robustness of DDP across different loading scenarios, additional tests were performed on a modified IEEE 123-bus variant (ieee123B) with different load profiles. \Cref{fig:ddp-convergence-bfm-b,fig:ddp-convergence-ldf-b} show the convergence behavior for this system configuration.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/SubstationPowerCostAllTime_vs_k_26_for_subsPowerCost_min_with_scd_alpha_2_124_gamma_0_0_via_tmprl_dcmpsd_spat_centr_system_with_bfm_NL_1ph.png}
+    \caption{All-time substation power cost convergence for ieee123B system using DDP with BFM-NL model. The algorithm exhibits similar rapid convergence characteristics, demonstrating robustness across different system configurations.}
+    \label{fig:ddp-convergence-bfm-b}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/SubstationPowerCostAllTime_vs_k_26_for_subsPowerCost_min_with_scd_alpha_0_7162_gamma_0_0_via_tmprl_dcmpsd_spat_centr_system_with_ldf_1ph.png}
+    \caption{All-time substation power cost convergence for ieee123B system using DDP with LinDistFlow model. Consistent convergence behavior validates DDP's effectiveness across both power flow formulations and system variants.}
+    \label{fig:ddp-convergence-ldf-b}
+\end{figure}
+
 Key observations from the convergence behavior:
 \begin{itemize}
     \item \textbf{Rapid Initial Convergence}: DDP achieves near-optimal cost within 4-5 forward passes, significantly faster than iterative ADMM-based methods
     \item \textbf{Model Independence}: Both BFM-NL and LinDistFlow exhibit similar convergence patterns, validating DDP's applicability across different power flow models
+    \item \textbf{System Robustness}: DDP performs consistently well across both ieee123A and ieee123B system variants with different loading profiles, demonstrating robustness to system parameters
     \item \textbf{Optimality Gap}: After convergence, DDP maintains costs very close to the brute-forced (monolithic) solution, with differences less than 0.1\%
 \end{itemize}
 
 \subsubsection{Performance Summary}
 
-The final converged solution (after 26 forward passes) achieved the performance metrics summarized in \Cref{tab:ddp-results}.
+The final converged solution for ieee123A (after 26 forward passes) achieved the performance metrics summarized in \Cref{tab:ddp-results}. DDP performed similarly well on ieee123B, confirming the algorithm's effectiveness across different system configurations.
 
 \begin{table}[h]
 \centering
@@ -193,6 +207,26 @@ Key observations from \Cref{tab:ddp-results}:
     \item \textbf{Effective DER Coordination}: Batteries perform significant transactions (1,034 kW total) while maintaining reasonable final SOC deviation
     \item \textbf{Computational Efficiency}: Achieving these results through temporal decomposition enables scalability to longer horizons
 \end{itemize}
+
+\subsubsection{Preliminary Results on Larger Systems}
+
+To explore DDP's scalability to larger distribution networks, preliminary tests were conducted on the IEEE 730-bus system. \Cref{fig:ddp-convergence-ieee730} shows the convergence behavior using LinDistFlow with relaxed convergence criteria (function value-based termination).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/SubstationPowerCostAllTime_vs_k_8_for_subsPowerCost_min_with_scd_alpha_1_08_gamma_0_0_via_tmprl_dcmpsd_spat_centr_system_with_ldf_1ph.png}
+    \caption{All-time substation power cost convergence for IEEE 730-bus system using DDP with LinDistFlow model. The algorithm shows directional convergence toward the optimal solution, though requiring relaxed termination criteria. Results indicate DDP's potential for large-scale systems while highlighting areas for algorithmic refinement.}
+    \label{fig:ddp-convergence-ieee730}
+\end{figure}
+
+While the results in \Cref{fig:ddp-convergence-ieee730} demonstrate that DDP's optimization trajectory is moving in the right direction, the convergence behavior suggests that further research is needed to:
+\begin{itemize}
+    \item \textbf{Enhance Convergence Rigor}: Develop more robust stopping criteria and regularization strategies for larger systems
+    \item \textbf{Improve Numerical Stability}: Investigate adaptive step-sizing and line-search methods tailored to large-scale MPOPF
+    \item \textbf{Scale Initialization}: Develop better warm-start strategies that leverage system structure for networks with 500+ buses
+\end{itemize}
+
+These preliminary findings indicate that while DDP shows promise for temporal decomposition of large-scale MPOPF problems, additional algorithmic development is necessary to achieve the same level of convergence reliability observed on smaller systems (ieee123A/B). This represents an important direction for future work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Summary}
