@@ -13,7 +13,7 @@ The two-stage objective function is a random variable. Thus, determining the opt
     
     \begin{figure}[t]
         \centering
-        \includegraphics[width=0.75\textwidth]{figures/first_second_stage_model.eps}
+%    \includegraphics[width=0.75\textwidth]{figures/first_second_stage_model.eps}
         \caption{Two-stage planning framework example for a specific scenario.}
         \label{fig:model_representation}
     \end{figure}
@@ -80,14 +80,14 @@ The overall architecture of the proposed method is shown in Fig.~\ref{fig:overal
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/overall_picture.eps}
+%    \includegraphics[width=0.8\textwidth]{figures/overall_picture.eps}
     \caption{Overall architecture of risk-averse two-stage planning problem. The first stage seeks the optimal planning decisions that minimize the expectation and risk of the recourse cost in the second stage for several scenario realizations. The scenarios are generated using Monte-Carlo simulation and reduced based on average loss for each scenario.}
     \label{fig:overall_architecture_framework}
 \end{figure} 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/wind_profile.pdf}
+%    \includegraphics[width=0.7\textwidth]{figures/wind_profile.pdf}
     \caption{Regional wind profile.}
     \label{fig:wind_profile}
 \end{figure}
@@ -103,7 +103,7 @@ The effectiveness of the proposed risk-based long-term planning model is verifie
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/IEEE_123_CL_update.eps}
+%    \includegraphics[width=0.7\textwidth]{figures/IEEE_123_CL_update.eps}
     \caption{Modified IEEE 123-bus test case}
     \label{fig:IEEE_123_CL_update}
 \end{figure}
@@ -117,12 +117,12 @@ Fig.~\ref{fig:scenario_reduction} represents the comparison between $L^u_{avg}$ 
      \centering
     %  \subfigure[]
      {
-        \includegraphics[width=0.42\linewidth]{figures/speed_15_MC_base.eps}
+%    \includegraphics[width=0.42\linewidth]{figures/speed_15_MC_base.eps}
         \label{fig:MCS_1}
     }\hfill
     % \subfigure[]
     {
-        \includegraphics[width=0.42\linewidth]{figures/speed_40_MC_base.eps}
+%    \includegraphics[width=0.42\linewidth]{figures/speed_40_MC_base.eps}
         \label{fig:MCS_2}
      }
      \caption{Moving average of loss of load obtained for 1000 Monte-Carlo trials a) without hardening when $u = 15~m/s$ and $p_f(u) = 0.002$ and b) with line hardening when $u = 40~m/s$ and $p_f(u) = 0.915$. For each wind speed scenario, it can be guaranteed that the prioritized load loss converges after 1000 Monte-Carlo trials.}
@@ -133,12 +133,12 @@ Fig.~\ref{fig:scenario_reduction} represents the comparison between $L^u_{avg}$ 
      \centering
     %  \subfigure[]
      {
-        \includegraphics[width=0.42\linewidth]{figures/scenario_new_load_base.eps}
+%    \includegraphics[width=0.42\linewidth]{figures/scenario_new_load_base.eps}
         \label{fig:scen_set_1}
     }\hfill
     % \subfigure[]
     {
-        \includegraphics[width=0.42\linewidth]{figures/scenario_new_load_harden.eps}
+%    \includegraphics[width=0.42\linewidth]{figures/scenario_new_load_harden.eps}
         \label{fig:scen_set_2}
      }
      \caption{Comparison of prioritized load loss obtained for two sets of reduced scenarios a) without hardening b) with hardening.}
@@ -212,11 +212,11 @@ Hence, this draws an important conclusion that risk-averse decisions enhance lon
         \centering
         % \subfigure[]
         {
-        \includegraphics[width=0.48\textwidth]{figures/harden_neutral.eps}
+%    \includegraphics[width=0.48\textwidth]{figures/harden_neutral.eps}
     }\hfill
     % \subfigure[]
     {
-        \includegraphics[width=0.48\textwidth]{figures/harden_averse.eps}  
+%    \includegraphics[width=0.48\textwidth]{figures/harden_averse.eps}  
      }
     \caption{\revise{DG sizing and siting solution for a specific scenario with additional hardening measures for a) risk-neutral and b) risk-averse planning strategy.}}
     \label{fig:neutral_vs_averse_harden}
@@ -227,7 +227,7 @@ The value of $CVaR$ depends on several factors such as investment decisions, bud
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/CVaR_alpha_harden.eps}
+%    \includegraphics[width=0.8\textwidth]{figures/CVaR_alpha_harden.eps}
     \vspace{-0.6cm}
     \caption{Comparison of $CVaR_\alpha$ of prioritized loss of load for different values of $\alpha$ and risk preference.}
     \label{fig:CVaR_vs_alpha}
@@ -237,12 +237,12 @@ The value of $CVaR$ depends on several factors such as investment decisions, bud
      \centering
     %  \subfigure[]
      {
-        \includegraphics[width=0.7\textwidth]{figures/DG_tradeoff_neutral.eps}
+%    \includegraphics[width=0.7\textwidth]{figures/DG_tradeoff_neutral.eps}
         \label{fig:DG_neutral}
     }
     % \subfigure[]
     {
-        \includegraphics[trim ={0 0 0 0.5cm} ,clip, width=0.7\textwidth]{figures/DG_tradeoff_averse.eps}
+%    \includegraphics[trim ={0 0 0 0.5cm} ,clip, width=0.7\textwidth]{figures/DG_tradeoff_averse.eps}
         \label{fig:DG_averse}
      }
      \caption{$CVaR_\alpha$ for different DG investment strategies for a) risk-neutral and b) risk-averse planning. The value on the x-axis represents the prioritized loss of load for each $\xi$ with corresponding $p_\xi$ represented on the y-axis.}
@@ -253,7 +253,7 @@ The value of $CVaR$ depends on several factors such as investment decisions, bud
 \begin{figure*}[!t]
         \centering
         % \vspace{0.5 cm}
-        \includegraphics[width=\textwidth]{figures/different_scenarios_2.eps}
+%    \includegraphics[width=\textwidth]{figures/different_scenarios_2.eps}
         \caption{\revise{Different number of scenarios with respective probabilities of occurrence: (a) 7 scenarios, (b) 21 scenarios; (c) 49 scenarios, (d) 98 scenarios e) 147 scenarios.}}
         \label{fig:scen_probab}
 \end{figure*}
@@ -269,14 +269,14 @@ Fig.~\ref{fig:scen_probab} shows five case studies simulated to evaluate the imp
 
 \begin{figure}[!t!]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/scenario_vs_time.eps}
+%    \includegraphics[width=0.7\textwidth]{figures/scenario_vs_time.eps}
     \caption{\revise{Comparison of objective value and solve time for a different number of scenarios.}}
     \label{fig:scen_vs_time}
 \end{figure}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/bundled_scenarios.eps}
+%    \includegraphics[width=0.7\textwidth]{figures/bundled_scenarios.eps}
     \caption{\revise{Comparison of objective value on a different set of scenarios for each number of scenarios sampled.}}
     \label{fig:scen_sets}
 \end{figure}
