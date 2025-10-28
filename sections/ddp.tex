@@ -222,11 +222,10 @@ To explore DDP's scalability to larger distribution networks, preliminary tests 
 While the results in \Cref{fig:ddp-convergence-ieee730} demonstrate that DDP's optimization trajectory is moving in the right direction, the convergence behavior suggests that further research is needed to:
 \begin{itemize}
     \item \textbf{Enhance Convergence Rigor}: Develop more robust stopping criteria and regularization strategies for larger systems
-    \item \textbf{Improve Numerical Stability}: Investigate adaptive step-sizing and line-search methods tailored to large-scale MPOPF
     \item \textbf{Scale Initialization}: Develop better warm-start strategies that leverage system structure for networks with 500+ buses
 \end{itemize}
 
-These preliminary findings indicate that while DDP shows promise for temporal decomposition of large-scale MPOPF problems, additional algorithmic development is necessary to achieve the same level of convergence reliability observed on smaller systems (ieee123A/B). This represents an important direction for future work.
+These preliminary findings indicate that while DDP shows promise for temporal decomposition of large-scale MPOPF problems, additional algorithmic development is necessary to achieve an adequate level of  convergence reliability. This represents an important direction for future work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Summary}
@@ -247,11 +246,4 @@ The key insight is that battery SOC couples time periods, while power flow const
     \item \textbf{Forward pass}: Rolls out trajectory respecting power flow constraints at each time step
 \end{itemize}
 
-While DDP demonstrates strong theoretical properties for nonlinear optimal control, its practical performance for MPOPF depends on:
-\begin{enumerate}
-    \item Quality of initialization (warm start from previous solution or LinDistFlow approximation)
-    \item Constraint handling method (projection onto feasible set most effective)
-    \item Regularization tuning (ensuring $Q_{uu}$ invertibility without over-damping)
-\end{enumerate}
-
-The next chapter explores an alternative temporal decomposition approach based on ADMM consensus, which trades off the Markov exploitation of DDP for greater parallelizability and convex convergence guarantees.
+The next chapter explores an alternative temporal decomposition approach based on ADMM consensus, which trades off its sequential nature for parallelizability and convex convergence guarantees.
