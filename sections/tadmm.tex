@@ -335,11 +335,24 @@ The temporal ADMM (tADMM) approach provides an effective decomposition framework
 
 The numerical results demonstrate that tADMM successfully decomposes the temporal coupling through battery SOC while maintaining solution optimality. The algorithm converges within a reasonable number of iterations, and the final solution matches the centralized optimal solution within the specified tolerances. This validates the effectiveness of the consensus-based decomposition for handling temporal coupling in MPOPF problems.
 
+\subsubsection{Implementation Status}
+
+The tADMM framework has been developed and tested with varying levels of network model complexity:
+
+\begin{itemize}
+    \item \textbf{Copper Plate Model (Completed)}: The tADMM algorithm has been successfully implemented and tested for the simplified copper plate MPOPF problem. The numerical results presented in Figs.~\ref{fig:battery_actions_copper_plate}, \ref{fig:battery_actions_tadmm}, and \ref{fig:convergence_curves} demonstrate successful convergence to the optimal solution, validating the temporal decomposition approach.
+    
+    \item \textbf{LinDistFlow Model (In Progress)}: The tADMM formulation with the linearized DistFlow model~\cite{LinDistFlow} is currently being implemented. This will incorporate spatial network constraints including voltage limits, line flow limits, and reactive power constraints while maintaining the temporal decomposition structure.
+    
+    \item \textbf{Nonlinear Branch Flow Model (Planned)}: Future work will extend the tADMM framework to the SOCP-relaxed nonlinear branch flow model (BFM)~\cite{bfm01}. This represents the true nonlinear MPOPF problem with exact AC power flow physics. The BFM formulation will provide a more accurate representation of distribution network behavior while benefiting from the computational advantages of temporal decomposition. This will showcase the full potential of tADMM for solving realistic large-scale MPOPF problems with complex network constraints.
+\end{itemize}
+
 Future extensions of this work will focus on:
 \begin{itemize}
+    \item Completing the LinDistFlow implementation and validating performance on realistic distribution networks
+    \item Implementing the SOCP-relaxed BFM formulation with tADMM decomposition
     \item Applying tADMM to larger distribution networks with multiple batteries and renewable energy sources
     \item Investigating adaptive penalty parameter selection strategies to improve convergence speed
-    \item Extending the framework to handle nonconvex AC power flow formulations
     \item Integrating spatial decomposition techniques with temporal decomposition for enhanced scalability
 \end{itemize}
 
