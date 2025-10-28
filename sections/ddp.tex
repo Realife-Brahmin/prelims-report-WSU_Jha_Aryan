@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Chapter: Differential Dynamic Programming for MPOPF
+% Context: Temporal decomposition via DDP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Temporal Decomposition via Differential Dynamic Programming}
+\label{sec:ddp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+While the spatial decomposition approach (ENApp) demonstrated in \Cref{sec:enapp} effectively partitions the network topology, it encounters computational challenges for long time horizons due to the temporal coupling through battery state-of-charge (SOC) dynamics. As shown in the previous chapter, spatial decomposition alone remains computationally expensive for planning horizons exceeding 10 hours.
+
+This motivates the investigation of \textbf{temporal decomposition} methods that can break down the multi-period optimization problem across time while maintaining feasibility and near-optimality. One such approach is \textbf{Differential Dynamic Programming (DDP)} \cite{ddp_sugar_01}, which leverages the sequential structure of the MPOPF problem to decompose it into a backward-forward sweep algorithm.
+
+DDP offers several advantages for MPOPF:
+\begin{itemize}
+    \item \textbf{Temporal Decomposition}: Solves smaller single-period or few-period subproblems sequentially
+    \item \textbf{Handles Nonlinearity}: Can work with nonlinear branch flow models (BFM-NL) without requiring linearization
+    \item \textbf{Scalability}: Computational complexity grows linearly with time horizon length
+    \item \textbf{Local Optimality}: Guarantees convergence to local optima through iterative refinement
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{DDP Algorithm for MPOPF}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The DDP algorithm iteratively refines a nominal trajectory through backward-forward sweeps. For MPOPF, the algorithm proceeds as follows:
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Computational Advantages for Long-Horizon MPOPF}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+DDP offers significant computational benefits compared to monolithic MPOPF formulations:
+
+\begin{enumerate}        
+    \item \textbf{Parallelizable Forward Pass}: Subproblems within forward pass can be solved in parallel across time steps.
+    
+    \item \textbf{Handles Nonlinearity}: Works directly with BFM-NL \cite{Farivar1} without requiring convex relaxations or linear approximations that may sacrifice accuracy.
+    
+    \item \textbf{Warm Starting}: Previous solutions provide excellent initialization for rolling-horizon Model Predictive Control (MPC) implementations.
+\end{enumerate}
+
+For a 24-hour horizon with 15-minute resolution ($N=96$), 123-bus system (IEEE 123), and 30 batteries, DDP reduces the problem from jointly optimizing $\sim$10,000 variables to solving 96 sequential subproblems each with $\sim$100 variables.
+
+
+For MPOPF, the projection approach is most practical, as it maintains power flow feasibility explicitly.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Relationship to Other Decomposition Methods}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+DDP provides complementary capabilities to the spatial decomposition (ENApp, \Cref{sec:enapp}):
+
+\begin{itemize}
+    \item \textbf{ENApp}: Decomposes across \textit{space} (network topology), coupling through boundary voltage and power variables
+    \item \textbf{DDP}: Decomposes across \textit{time} (temporal horizon), coupling through battery SOC evolution
+    \item \textbf{Combined Approach}: Apply spatial decomposition (ENApp) within each DDP time-step subproblem, achieving both spatial and temporal scalability
+\end{itemize}
+
+Compared to ADMM-based temporal decomposition (next chapter):
+\begin{itemize}
+    \item \textbf{DDP}: Sequential backward-forward sweeps, exploits Markov (causal) structure of battery SOC, local convergence to stationary points
+    \item \textbf{tADMM}: Parallel consensus-based optimization, handles separable structure, global convergence guarantees for convex problems
+    \item \textbf{Trade-off}: DDP more efficient for few iterations (warm start), ADMM more parallelizable for cold start
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Differential Dynamic Programming provides a principled temporal decomposition framework for large-scale MPOPF problems. By reformulating MPOPF as an optimal control problem with battery SOC as states, DDP achieves:
+
+\begin{itemize}
+    \item \textbf{Linear time complexity} $\mathcal{O}(N)$ in horizon length $N$
+    \item \textbf{Natural handling} of nonlinear branch flow models (BFM-NL) without approximation
+    \item \textbf{Sequential structure} exploiting causal battery dynamics
+    \item \textbf{Warm-start capability} for rolling-horizon MPC implementations
+\end{itemize}
+
+The key insight is that battery SOC couples time periods, while power flow constraints decouple across time. DDP leverages this structure by solving backward-forward passes, where:
+\begin{itemize}
+    \item \textbf{Backward pass}: Computes optimal feedback policy (how battery should react to SOC deviations)
+    \item \textbf{Forward pass}: Rolls out trajectory respecting power flow constraints at each time step
+\end{itemize}
+
+While DDP demonstrates strong theoretical properties for nonlinear optimal control, its practical performance for MPOPF depends on:
+\begin{enumerate}
+    \item Quality of initialization (warm start from previous solution or LinDistFlow approximation)
+    \item Constraint handling method (projection onto feasible set most effective)
+    \item Regularization tuning (ensuring $Q_{uu}$ invertibility without over-damping)
+\end{enumerate}
+
+The next chapter explores an alternative temporal decomposition approach based on ADMM consensus, which trades off the Markov exploitation of DDP for greater parallelizability and convex convergence guarantees.

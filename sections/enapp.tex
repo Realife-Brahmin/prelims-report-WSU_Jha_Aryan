@@ -1,6 +1,6 @@
 \clearpage
 \section{Spatial Decomposition via Equivalent Network Approximation (ENApp)}
-
+\label{sec:enapp}
 \subsection{Introduction and Motivation}
 
 Optimal power flow (OPF) methods are employed to optimally coordinate grid's controllable resources for different system-level objectives, such as economic operations, reliability, and resilience. The significance of OPF studies is growing in relevance at the distribution system level, driven by the increasing adoption of distributed energy resources (DERs), particularly photovoltaic systems (PVs) and battery energy storage systems (BESS). Furthermore, the adoption of BESS is gaining significance for managing the variability of DERs through controlled charging and discharging, thereby ensuring supply-demand balance \cite{tgangwar}. Incorporating BESS into OPF problems substantially raises the complexity of network optimization problems, transitioning from a single-period, time-decoupled OPF to a multi-period, time-coupled OPF.
@@ -377,8 +377,6 @@ Future extensions of this work will focus on:
 \begin{itemize}
     \item \textbf{Larger Networks}: Applying MPDOPF to larger distribution networks (e.g., IEEE 8500 bus system) to further validate scalability
     \item \textbf{Higher DER Penetrations}: Testing the algorithm with increased renewable energy and battery penetrations (e.g., 50\% PV, 50\% BESS)
-    \item \textbf{Uncertainty Modeling}: Incorporating stochastic or robust optimization frameworks to handle forecast uncertainties
-    \item \textbf{Real-time Applications}: Adapting the algorithm for real-time operational decision-making with rolling horizon optimization
     \item \textbf{Combined Decomposition}: Integrating spatial (ENApp) and temporal (tADMM) decomposition techniques for enhanced scalability in large-scale, long-horizon problems
     \item \textbf{Convergence Acceleration}: Investigating adaptive parameter tuning and warm-start strategies to reduce the number of macro iterations
 \end{itemize}
