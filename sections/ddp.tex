@@ -16,10 +16,11 @@ This motivates the investigation of \textbf{temporal decomposition} methods that
 
 DDP offers several advantages for MPOPF:
 \begin{itemize}
-    \item \textbf{Temporal Decomposition}: Solves smaller single-period or few-period subproblems sequentially
+    \item \textbf{Temporal Decomposition}: Solves single-period subproblems sequentially
     \item \textbf{Handles Nonlinearity}: Can work with nonlinear branch flow models (BFM-NL) without requiring linearization
     \item \textbf{Scalability}: Computational complexity grows linearly with time horizon length
     \item \textbf{Local Optimality}: Guarantees convergence to local optima through iterative refinement
+    \item \textbf{Guaranteed Feasibility always}: At any Forward Pass iteration ensures that its current solution is feasible (provided there are no terminal constraints on state variable such as terminal SOC constraint)
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,6 +28,54 @@ DDP offers several advantages for MPOPF:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The DDP algorithm iteratively refines a nominal trajectory through backward-forward sweeps. For MPOPF, the algorithm proceeds as follows:
+
+\subsubsection*{DDP Workflow: Forward Pass for Non-Terminal Time-Step $t \in \{1, 2, \ldots T-1\}$}
+
+At each non-terminal time-step, the forward pass solves the following optimization problem where the previous battery SOC $\textcolor{red}{B_{j}^{t-1}}$ is known from the previous time-step, and the Lagrange multiplier $\textcolor{blue}{\mu_{SOC{_j}}^{t+1}}$ from the next time-step influences the current decision:
+
+\begin{gather}
+    \begin{align}
+        \min_{} 
+        \vspace{-15ex}
+        & \quad
+        C^t P_{Subs}^t \\
+        &+ \alpha \sum_{j \in \mathcal{B}} \left\{ (1- \eta_c)P_{c_j}^t + \left(\frac{1}{\eta_d}-1\right) P_{d_j}^t \right\} \nonumber\\
+        &+ \sum_{j \in \mathcal{B}} { \textcolor{blue}{ \mu_{SOC{_j}}^{t+1}} \left\{ - B_{j}^{t} \right\} } \nonumber\\
+        \text{s.t.} & {}\nonumber\\
+        {0} & = {\sum_{(j, k) \in \mathcal{L}} \left\{P_{jk}^t\right\} - \left\{P_{ij}^t - r_{ij}l_{ij}^t\right\} - (P_{d_j}^t - P_{c_j}^t)  - (p_D{_j}^t) + p_L{_j}^t} && \\
+        {0} & = {\sum_{(j, k) \in \mathcal{L}} \left\{Q_{jk}^t\right\} - \left\{Q_{ij}^t - x_{ij}l_{ij}^t\right\} - (q_{D_j}^t) - (q_{B_j}^t) + q_L{_j}^t} && \\
+        {0} & = {v_{i}^t - v_{j}^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t) + \left\{r_{ij}^2 + x_{ij}^2\right\}l_{ij}^t}  && \\
+        {0} & = {(P_{ij}^{t})^2 + (Q_{ij}^{t})^2 - v_{i}^t l_{ij}^t } \\
+        {0} & = {B_{j}^{t} - \left\{ \textcolor{red}{ B_{j}^{t-1} } + \Delta t  \eta_c P_{c_j}^t - \Delta t\frac{1}{\eta_d} P_{d_j}^t \right\} } \\
+        {0} & \geq {B{_{min_{j}}}^t - B{_j}^t} \\
+        {0} & \geq {B{_j}^t - B{_{Max_{j}}}^t} \\
+        {0} & \geq {\text{All other inequality constraints}}
+    \end{align}
+\end{gather}
+
+\subsubsection*{DDP Workflow: Forward Pass for the Terminal Time-Step $t = T$}
+
+At the terminal time-step, the forward pass includes the terminal penalty on battery SOC deviation from reference:
+
+\begin{gather}
+    \begin{align}
+        \min_{} 
+        \vspace{-15ex}
+        & \quad
+        C^t P_{Subs}^t \\
+        &+ \alpha \sum_{j \in \mathcal{B}} \left\{ (1- \eta_c)P_{c_j}^t + \left(\frac{1}{\eta_d}-1\right) P_{d_j}^t \right\} \nonumber\\
+        &+ \gamma \sum_{j \in \mathcal{B}} \left\{ \left(B^{T}_{j} - B_{ref_{j}}\right)^2\right\} \nonumber\\
+        \text{s.t.} & {}\nonumber\\
+        {0} & = {\sum_{(j, k) \in \mathcal{L}} \left\{P_{jk}^t\right\} - \left\{P_{ij}^t - r_{ij}l_{ij}^t\right\} - (P_{d_j}^t - P_{c_j}^t)  - (p_D{_j}^t) + p_L{_j}^t} && \\
+        {0} & = {\sum_{(j, k) \in \mathcal{L}} \left\{Q_{jk}^t\right\} - \left\{Q_{ij}^t - x_{ij}l_{ij}^t\right\} - (q_{D_j}^t) - (q_{B_j}^t) + q_L{_j}^t} && \\
+        {0} & = {v_{i}^t - v_{j}^t - 2(r_{ij}P_{ij}^t + x_{ij}Q_{ij}^t) + \left\{r_{ij}^2 + x_{ij}^2\right\}l_{ij}^t}  && \\
+        {0} & = {(P_{ij}^{t})^2 + (Q_{ij}^{t})^2 - v_{i}^t l_{ij}^t } \\
+        {0} & = {B_{j}^{t} - \left\{ \textcolor{red}{ B_{j}^{t-1} } + \Delta t  \eta_c P_{c_j}^t - \Delta t\frac{1}{\eta_d} P_{d_j}^t \right\} } \\
+        {0} & \geq {B{_{min_{j}}}^t - B{_j}^t} \\
+        {0} & \geq {B{_j}^t - B{_{Max_{j}}}^t} \\
+        {0} & \geq {\text{All other inequality constraints}}
+    \end{align}
+\end{gather}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Computational Advantages for Long-Horizon MPOPF}
@@ -61,8 +110,8 @@ DDP provides complementary capabilities to the spatial decomposition (ENApp, \Cr
 
 Compared to ADMM-based temporal decomposition (next chapter):
 \begin{itemize}
-    \item \textbf{DDP}: Sequential backward-forward sweeps, exploits Markov (causal) structure of battery SOC, local convergence to stationary points
-    \item \textbf{tADMM}: Parallel consensus-based optimization, handles separable structure, global convergence guarantees for convex problems
+    \item \textbf{DDP}: Sequential backward-forward sweeps, local convergence to stationary points, guaranteed feasible solution at any stage of the algorithm
+    \item \textbf{tADMM}: Parallel consensus-based optimization, handles separable structure, global convergence guarantees for convex problems, no guarantee of feasible solution at any current algorithm stage
     \item \textbf{Trade-off}: DDP more efficient for few iterations (warm start), ADMM more parallelizable for cold start
 \end{itemize}
 
