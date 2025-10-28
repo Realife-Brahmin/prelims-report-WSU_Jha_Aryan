@@ -103,7 +103,14 @@ u_j^{t_0}[t] &:= u_j^{t_0}[t] + \left( B_j^{t_0}[t] - \hat{B}_j[t] \right)
 
 \subsubsection{Problem Overview}
 
-The Temporal ADMM (tADMM) algorithm decomposes the multi-period optimal power flow problem into $T$ single-step subproblems, each corresponding to one time period. The hope is to enable parallel computation and improved scalability while still retaining solution optimality.
+The Temporal ADMM (tADMM) algorithm decomposes the multi-period optimal power flow problem into $T$ single-step subproblems, each corresponding to one time period. The hope is to enable parallel computation and improved scalability while still retaining solution optimality. Fig.~\ref{fig:input_curves} shows the input data for a 24-hour horizon, including the time-varying electricity cost and load demand profiles used in the copper plate MPOPF formulation.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/input-curves-cost-and-load-only-T24.png}
+    \caption{Input curves showing electricity cost and load demand over a 24-hour period.}
+    \label{fig:input_curves}
+\end{figure}
 
 \subsubsection{Variable Color Coding}
 \begin{itemize}
@@ -152,6 +159,37 @@ P_{\text{subs}}^{t_0} + P_{B}^{t_0} &= P_L[t_0] \\
 u^{t_0}[t] &:= u^{t_0}[t] + \left( B^{t_0}[t] - \hat{B}[t] \right) \\
 &\quad \forall t_0 \in \{1, \ldots, T\}, \, \forall t \in \{1, \ldots, T\}
 \end{align}
+
+\subsection{Numerical Results}
+
+\subsubsection{Battery Actions and Convergence Analysis}
+
+Fig.~\ref{fig:battery_actions_copper_plate} shows the optimal battery charging and discharging actions obtained from the copper plate tADMM formulation. The battery strategically charges during low-cost periods and discharges during high-cost periods to minimize the overall energy cost over the 24-hour horizon.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/battery-actions-copper-plate-T24-bf.png}
+    \caption{Optimal battery power actions (brute force solution) for copper plate MPOPF over 24-hour horizon.}
+    \label{fig:battery_actions_copper_plate}
+\end{figure}
+
+Fig.~\ref{fig:battery_actions_tadmm} presents the battery actions obtained using the tADMM algorithm, demonstrating that the decomposition approach converges to a solution that closely matches the centralized optimal solution.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/battery-actions-copper-plate-T24-tadmm.png}
+    \caption{Battery power actions obtained using tADMM for copper plate MPOPF over 24-hour horizon.}
+    \label{fig:battery_actions_tadmm}
+\end{figure}
+
+Fig.~\ref{fig:convergence_curves} illustrates the convergence behavior of the tADMM algorithm, showing how the primal and dual residuals decrease over iterations until they satisfy the specified convergence tolerances.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/convergence-curves-copper-plate-T24-tadmm.png}
+    \caption{Convergence curves showing primal and dual residuals for tADMM algorithm.}
+    \label{fig:convergence_curves}
+\end{figure}
 
 \subsection{Convergence Criteria}
 
