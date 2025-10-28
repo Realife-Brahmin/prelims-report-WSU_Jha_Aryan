@@ -2,6 +2,15 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../NAPS_2024_MultiPeriod-DistOPF"
+		},
+		{
+			"path": "../NE-IECCE-2025-Nonlinear-vs-Linear-MPOPF-Analysis"
+		},
+		{
+			"path": "../documentsCreated_repo/thesis_ee800"
 		}
 	],
 	"settings": {
